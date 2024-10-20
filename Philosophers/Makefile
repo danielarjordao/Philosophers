@@ -3,18 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+         #
+#    By: dramos-j <dramos-j@student.42porto.com>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/19 14:12:02 by dramos-j          #+#    #+#              #
-#    Updated: 2024/10/19 14:13:43 by dramos-j         ###   ########.fr        #
+#    Updated: 2024/10/20 11:06:29 by dramos-j         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = Philosophers
-LIBFT_DIR = libft
-LIBFT = $(LIBFT_DIR)/libft.a
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror $(EXTRAFLAGS)
+EXTRAFLAGS = -pthread
 SRCS = main.c
 OBJS = $(SRCS:.c=.o)
 RM = rm -rf
@@ -22,18 +21,15 @@ RM = rm -rf
 all: $(NAME)
 
 $(NAME) : $(OBJS)
-	make -C $(LIBFT_DIR)
-	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	make -C $(LIBFT_DIR) clean
 	$(RM) $(OBJS)
 
 fclean: clean
-	make -C $(LIBFT_DIR) fclean
 	$(RM) $(NAME)
 
 re: fclean all
