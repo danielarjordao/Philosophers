@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:57:37 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/10/27 17:36:54 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/10/31 17:02:35 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,52 @@ void	init_data(t_data *data, int argc, char **argv)
 		data->num_times_to_eat = atoi(argv[5]);
 	else
 		data->num_times_to_eat = -1;
-}
-
-void	init_philo(t_data *data)
-{
-	int			i;
-
-	data->philo = malloc(sizeof(pthread_t) * data->num_philosophers);
-	if (!data->philo)
+	data->fork = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
+	data->philo = malloc(sizeof(t_philo) * data->num_philosophers);
+	if (!data->fork || !data->philo)
 	{
-		printf("Error: Malloc failed\n");
+		printf("Error: malloc\n");
 		exit(1);
+	}
+}
+void	init_fork(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->num_philosophers)
+	{
+		pthread_mutex_init(&data->fork[i], NULL);
+		i++;
 	}
 	i = 0;
 	while (i < data->num_philosophers)
 	{
-		pthread_create(&data->philo[i], NULL, philosopher_routine, data);
+		data->philo[i].id = i + 1;
+		data->philo[i].l_fork = &data->fork[i];
+		data->philo[i].r_fork = &data->fork[(i + 1) % data->num_philosophers];
+		data->philo[i].data = data;
+		i++;
+	}
+}
+void	init_philo(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->num_philosophers)
+	{
+		if (pthread_create(&data->philo[i].philosophers, NULL, philosopher_routine, &data->philo[i]) != 0)
+		{
+			printf("Error: pthread_create\n");
+			exit(1);
+		}
+		i++;
+	}
+	i = 0;
+	while (i < data->num_philosophers)
+	{
+		pthread_join(data->philo[i].philosophers, NULL);
 		i++;
 	}
 }
