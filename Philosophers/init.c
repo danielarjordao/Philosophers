@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:57:37 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/10/31 17:02:35 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/11/02 16:49:37 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,17 @@ void	init_data(t_data *data, int argc, char **argv)
 		data->num_times_to_eat = atoi(argv[5]);
 	else
 		data->num_times_to_eat = -1;
+	if (data->num_philosophers <= 0)
+		return ;
+	data->start_time = get_time();
 	data->fork = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);
 	data->philo = malloc(sizeof(t_philo) * data->num_philosophers);
 	if (!data->fork || !data->philo)
 	{
-		printf("Error: malloc\n");
+		if (!data->fork)
+			printf("Error: data->fork malloc\n");
+		if (!data->philo)
+			printf("Error: data->philo malloc\n");
 		exit(1);
 	}
 }
@@ -40,16 +46,8 @@ void	init_fork(t_data *data)
 		pthread_mutex_init(&data->fork[i], NULL);
 		i++;
 	}
-	i = 0;
-	while (i < data->num_philosophers)
-	{
-		data->philo[i].id = i + 1;
-		data->philo[i].l_fork = &data->fork[i];
-		data->philo[i].r_fork = &data->fork[(i + 1) % data->num_philosophers];
-		data->philo[i].data = data;
-		i++;
-	}
 }
+
 void	init_philo(t_data *data)
 {
 	int	i;
@@ -57,7 +55,27 @@ void	init_philo(t_data *data)
 	i = 0;
 	while (i < data->num_philosophers)
 	{
-		if (pthread_create(&data->philo[i].philosophers, NULL, philosopher_routine, &data->philo[i]) != 0)
+
+		data->philo[i].id = i + 1;
+		data->philo[i].l_fork = &data->fork[i];
+		data->philo[i].r_fork = &data->fork[(i + 1) % data->num_philosophers];
+		data->philo[i].data = data;
+		data->philo[i].last_eaten = data->start_time;
+		data->philo[i].num_times_eaten = 0;
+		i++;
+	}
+}
+
+void	init_threads(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	if (data->num_times_to_eat == 0)
+		return ;
+	while (i < data->num_philosophers)
+	{
+		if (pthread_create(&data->philo[i].philo_thread, NULL, philosopher_routine, &data->philo[i]) != 0)
 		{
 			printf("Error: pthread_create\n");
 			exit(1);
@@ -67,8 +85,7 @@ void	init_philo(t_data *data)
 	i = 0;
 	while (i < data->num_philosophers)
 	{
-		pthread_join(data->philo[i].philosophers, NULL);
+		pthread_join(data->philo[i].philo_thread, NULL);
 		i++;
 	}
 }
-

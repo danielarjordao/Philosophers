@@ -6,11 +6,12 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 16:04:12 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/10/31 15:59:07 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/11/02 16:46:05 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
 
 void	clean(t_data *data)
 {
@@ -24,4 +25,12 @@ void	clean(t_data *data)
 	}
 	free(data->fork);
 	free(data->philo);
+}
+
+int	get_time(void)
+{
+	struct timeval	time;
+
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }

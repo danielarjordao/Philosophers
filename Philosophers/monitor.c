@@ -1,39 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   monitor.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/19 14:07:36 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/11/02 16:57:44 by dramos-j         ###   ########.fr       */
+/*   Created: 2024/11/02 16:54:33 by dramos-j          #+#    #+#             */
+/*   Updated: 2024/11/02 16:54:55 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int	main(int argc, char **argv)
+void	check_death(t_philo *philo)
 {
-	t_data	data;
-
-	if (argc != 5 && argc != 6)
+	if (philo->data->num_times_to_eat != -1)
 	{
-		printf("Error: ./philo number_of_philosophers time_to_die time_to_eat");
-		printf(" time_to_sleep [number_of_times_each_philosopher_must_eat]\n");
-		return (1);
+		if (philo->num_times_eaten >= philo->data->num_times_to_eat)
+			return ;
 	}
-	init_data(&data, argc, argv);
-	if (check_args(&data))
-		return (1);
-	check_args(&data);
-	init_fork(&data);
-	init_philo(&data);
-	init_threads(&data);
-	clean(&data);
+	if (get_time() - philo->last_eaten > philo->data->time_to_die)
+	{
+		printf("%d %d died\n", get_time() - philo->data->start_time, philo->id);
+		exit(1);
+	}
 }
-
-
-
-
-
-
