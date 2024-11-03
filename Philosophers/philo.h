@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   philo.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dramos-j <dramos-j@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:50:36 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/11/02 16:56:05 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/11/03 16:01:54 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,13 +39,16 @@ typedef struct s_data {
 	int num_times_to_eat;
 	int	start_time;
 	int	end_time;
+	int	*is_dead;
 	pthread_mutex_t	*fork;
+	pthread_mutex_t	print;
+	pthread_mutex_t	death;
 	t_philo *philo;
 } t_data;
 
 //init.c
 void	init_data(t_data *data, int argc, char **argv);
-void	init_fork(t_data *data);
+void	init_mutex(t_data *data);
 void	init_philo(t_data *data);
 void	init_threads(t_data *data);
 
@@ -53,6 +56,7 @@ void	init_threads(t_data *data);
 int	check_args(t_data *data);
 
 //routine.c
+void	philo_alone(t_data *data);
 void	*philosopher_routine(void *data);
 void	eat(t_philo *philo);
 
@@ -60,8 +64,8 @@ void	eat(t_philo *philo);
 void	check_death(t_philo *philo);
 
 // utils.c
-void	clean(t_data *data);
+int	ft_atoi(const char *nptr);
 int	get_time(void);
-int	check_args(t_data *data);
+void	clean(t_data *data);
 
 #endif

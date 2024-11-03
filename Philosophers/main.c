@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dramos-j <dramos-j@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:36 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/11/02 16:57:44 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/11/03 15:37:16 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	main(int argc, char **argv)
 	if (check_args(&data))
 		return (1);
 	check_args(&data);
-	init_fork(&data);
+	init_mutex(&data);
 	init_philo(&data);
 	init_threads(&data);
 	clean(&data);

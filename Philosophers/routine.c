@@ -3,14 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   routine.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dramos-j <dramos-j@student.42porto.com>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:58:27 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/11/02 16:58:05 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/11/03 16:03:15 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	philo_alone(t_data *data)
+{
+	pthread_mutex_lock(&data->fork[0]);
+	printf("%d %d has taken a fork\n", get_time() - data->start_time, 1);
+	usleep(1000 * data->time_to_die);
+	printf("%d %d died\n", get_time() - data->start_time, 1);
+	pthread_mutex_unlock(&data->fork[0]);
+	exit(1);
+}
 
 void	*philosopher_routine(void *data)
 {
