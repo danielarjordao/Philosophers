@@ -6,7 +6,7 @@
 #    By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/19 14:12:02 by dramos-j          #+#    #+#              #
-#    Updated: 2024/12/15 16:49:28 by dramos-j         ###   ########.fr        #
+#    Updated: 2024/12/15 17:01:51 by dramos-j         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,17 @@ fclean: clean
 	$(RM) $(NAME)
 
 re: fclean all
+
+run:
+	@read -p "Enter number of philosophers: " philo; \
+	read -p "Enter time to die: " die; \
+	read -p "Enter time to eat: " eat; \
+	read -p "Enter time to sleep: " sleep; \
+	read -p "Enter number of times to eat: " eat_count; \
+	$(MAKE) re run_program ARGS="$$philo $$die $$eat $$sleep $$eat_count"
+
+run_program:
+	./$(NAME) $(ARGS)
 
 run_valgrind:
 	@read -p "Enter number of philosophers: " philo; \
