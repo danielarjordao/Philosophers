@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dramos-j <dramos-j@student.42porto.com>    +#+  +:+       +#+        */
+/*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 16:04:12 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/11/03 15:24:34 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/18 19:39:29 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,55 @@ void	clean(t_data *data)
 	i = 0;
 	while (i < data->num_philosophers)
 	{
+
 		pthread_mutex_destroy(&data->fork[i]);
 		i++;
 	}
-	free(data->fork);
-	free(data->philo);
+	pthread_mutex_destroy(&data->print);
+	pthread_mutex_destroy(&data->monitor);
+	clean_data(data);
+}
+
+void	clean_data(t_data *data)
+{
+	if (data->fork)
+		free(data->fork);
+	if (data->philo)
+		free(data->philo);
+	if (data)
+		free(data);
+}
+
+int	check_malloc(void *ptr)
+{
+	if (!ptr)
+	{
+		printf("Error: malloc\n");
+		return (1);
+	}
+	return (0);
+}
+
+void	lock_forks(t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo->data->num_philosophers)
+	{
+		pthread_mutex_lock(&philo->data->fork[i]);
+		i++;
+	}
+}
+
+void	unlock_forks(t_philo *philo)
+{
+	int	i;
+
+	i = 0;
+	while (i < philo->data->num_philosophers)
+	{
+		pthread_mutex_unlock(&philo->data->fork[i]);
+		i++;
+	}
 }

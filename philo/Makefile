@@ -6,7 +6,7 @@
 #    By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/19 14:12:02 by dramos-j          #+#    #+#              #
-#    Updated: 2024/12/15 17:01:51 by dramos-j         ###   ########.fr        #
+#    Updated: 2024/12/18 13:21:07 by dramos-j         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ EXTRAFLAGS = -pthread
 SRCS = main.c init.c check_args.c routine.c monitor.c utils.c
 OBJS = $(SRCS:.c=.o)
 RM = rm -rf
-VALGRIND = valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes
+VALGRIND = valgrind --quiet --leak-check=full --show-leak-kinds=all --track-origins=yes
 
 all: $(NAME)
 
