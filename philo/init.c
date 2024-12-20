@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:57:37 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/18 19:40:09 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/20 16:10:51 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,6 @@ void	init_threads(t_data *data)
 		philo_alone(data);
 		return ;
 	}
-	printf("init philo\n");
 	while (i < data->num_philosophers)
 	{
 		if (pthread_create(&data->philo[i].philo_thread, NULL, philosopher_routine, &data->philo[i]) != 0)
@@ -99,15 +98,10 @@ void	init_threads(t_data *data)
 		i++;
 	}
 	i = 0;
-	if (pthread_create(&data->monitor_thread, NULL, monitor_routine, data))
-	{
-		printf("Error: pthread_create monitor\n");
-		return ;
-	}
+	monitor_routine(data);
 	while (i < data->num_philosophers)
 	{
 		pthread_join(data->philo[i].philo_thread, NULL);
 		i++;
 	}
-	pthread_join(data->monitor_thread, NULL);
 }

@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:07:36 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/18 19:08:40 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/20 14:38:28 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	main(int argc, char **argv)
 	init_philo(data);
 	init_threads(data);
 	clean(data);
+	return (0);
 }
 
 

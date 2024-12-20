@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:58:27 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/18 19:40:42 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/20 18:36:51 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,12 +30,9 @@ void	*philosopher_routine(void *data)
 	while (1)
 	{
 		if (tmp_philo->id % 2 == 0)
-			usleep(100);
+			usleep(500);
 		if (tmp_philo->data->is_dead == 1 || tmp_philo->data->is_satisfied == 1)
-		{
-			unlock_forks(tmp_philo);
 			break ;
-		}
 		eating(tmp_philo);
 		sleeping(tmp_philo);
 		thinking(tmp_philo);
@@ -43,7 +40,7 @@ void	*philosopher_routine(void *data)
 	return (NULL);
 }
 
-void	eating(t_philo *philo)
+void	take_forks(t_philo *philo)
 {
 	int	actual_time;
 
@@ -53,8 +50,6 @@ void	eating(t_philo *philo)
 			pthread_mutex_lock(philo->r_fork);
 		else
 			pthread_mutex_lock(philo->l_fork);
-		if (philo->data->is_dead == 1 || philo->data->is_satisfied == 1)
-			return ;
 		actual_time = get_time() - philo->data->start_time;
 		pthread_mutex_lock(&philo->data->print);
 		printf("%d %d has taken a fork\n", actual_time, philo->id);
@@ -66,21 +61,32 @@ void	eating(t_philo *philo)
 			pthread_mutex_lock(philo->l_fork);
 		else
 			pthread_mutex_lock(philo->r_fork);
-		if (philo->data->is_dead == 1 || philo->data->is_satisfied == 1)
-			return ;
 		actual_time = get_time() - philo->data->start_time;
 		pthread_mutex_lock(&philo->data->print);
 		printf("%d %d has taken a fork\n", actual_time, philo->id);
 		pthread_mutex_unlock(&philo->data->print);
 	}
+}
+
+void	eating(t_philo *philo)
+{
+	int	actual_time;
+
+
+	take_forks(philo);
 	if (philo->data->is_dead == 0 && philo->data->is_satisfied == 0)
 	{
+		actual_time = get_time() - philo->data->start_time;
+		pthread_mutex_lock(&philo->data->monitor);
 		philo->last_eaten = get_time();
+		pthread_mutex_unlock(&philo->data->monitor);
 		pthread_mutex_lock(&philo->data->print);
 		printf("%d %d is eating\n", actual_time, philo->id);
 		pthread_mutex_unlock(&philo->data->print);
 		usleep(1000 * philo->data->time_to_eat);
+		pthread_mutex_lock(&philo->data->monitor);
 		philo->num_times_eaten++;
+		pthread_mutex_unlock(&philo->data->monitor);
 		pthread_mutex_unlock(philo->l_fork);
 		pthread_mutex_unlock(philo->r_fork);
 	}
