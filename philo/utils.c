@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 16:04:12 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/20 14:29:52 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/21 17:55:21 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,13 @@ void	clean(t_data *data)
 	i = 0;
 	while (i < data->num_philosophers)
 	{
-
 		pthread_mutex_destroy(&data->fork[i]);
 		i++;
 	}
-	pthread_mutex_destroy(&data->print);
-	pthread_mutex_destroy(&data->monitor);
-	clean_data(data);
-}
-
-void	clean_data(t_data *data)
-{
 	if (data->fork)
 		free(data->fork);
+	pthread_mutex_destroy(&data->print);
+	pthread_mutex_destroy(&data->monitor);
 	if (data->philo)
 		free(data->philo);
 	if (data)
@@ -82,4 +76,16 @@ int	check_malloc(void *ptr)
 		return (1);
 	}
 	return (0);
+}
+
+void	join_philo(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->num_philosophers)
+	{
+		pthread_join(data->philo[i].philo_thread, NULL);
+		i++;
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:58:27 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/20 18:36:51 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/21 17:54:27 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,17 @@ void	*philosopher_routine(void *data)
 	t_philo	*tmp_philo;
 
 	tmp_philo = (t_philo *)data;
-	while (1)
+	if (tmp_philo->data->num_philosophers == 1)
 	{
-		if (tmp_philo->id % 2 == 0)
+		philo_alone(tmp_philo->data);
+		return (NULL);
+	}
+	while (!finish_meal(tmp_philo))
+	{
+		if (tmp_philo->id % 2 != 0)
 			usleep(500);
-		if (tmp_philo->data->is_dead == 1 || tmp_philo->data->is_satisfied == 1)
-			break ;
+		if (finish_meal(tmp_philo))
+			return (NULL);
 		eating(tmp_philo);
 		sleeping(tmp_philo);
 		thinking(tmp_philo);
@@ -40,38 +45,9 @@ void	*philosopher_routine(void *data)
 	return (NULL);
 }
 
-void	take_forks(t_philo *philo)
-{
-	int	actual_time;
-
-	if (philo->data->is_dead == 0 && philo->data->is_satisfied == 0)
-	{
-		if (philo->id % 2 == 0)
-			pthread_mutex_lock(philo->r_fork);
-		else
-			pthread_mutex_lock(philo->l_fork);
-		actual_time = get_time() - philo->data->start_time;
-		pthread_mutex_lock(&philo->data->print);
-		printf("%d %d has taken a fork\n", actual_time, philo->id);
-		pthread_mutex_unlock(&philo->data->print);
-	}
-	if (philo->data->is_dead == 0 && philo->data->is_satisfied == 0)
-	{
-		if (philo->id % 2 == 0)
-			pthread_mutex_lock(philo->l_fork);
-		else
-			pthread_mutex_lock(philo->r_fork);
-		actual_time = get_time() - philo->data->start_time;
-		pthread_mutex_lock(&philo->data->print);
-		printf("%d %d has taken a fork\n", actual_time, philo->id);
-		pthread_mutex_unlock(&philo->data->print);
-	}
-}
-
 void	eating(t_philo *philo)
 {
 	int	actual_time;
-
 
 	take_forks(philo);
 	if (philo->data->is_dead == 0 && philo->data->is_satisfied == 0)
@@ -109,7 +85,6 @@ void	sleeping(t_philo *philo)
 void	thinking(t_philo *philo)
 {
 	int	actual_time;
-
 
 	if (philo->data->is_dead == 0 && philo->data->is_satisfied == 0)
 	{
