@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 15:57:37 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/21 17:45:02 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/22 17:15:14 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	init_data(t_data *data, int argc, char **argv)
 		data->num_times_to_eat = ft_atoi(argv[5]);
 	else
 		data->num_times_to_eat = -1;
-	if (check_args(data))
+	if (check_args(data, argc))
 		return (1);
 	data->start_time = 0;
 	data->fork = malloc(sizeof(pthread_mutex_t) * data->num_philosophers);

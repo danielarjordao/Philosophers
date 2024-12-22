@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/27 16:04:12 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/21 17:55:21 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/22 18:48:39 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,15 +22,15 @@ int	ft_atoi(const char *nptr)
 	s = 1;
 	nb = 0;
 	while (nptr[i] == ' ' || (nptr[i] >= 9 && nptr[i] <= 13))
-	{
 		i++;
-	}
 	if (nptr[i] == '-' || nptr[i] == '+')
 	{
 		if (nptr[i] == '-')
 			s = s * (-1);
 		i = i + 1;
 	}
+	if (nptr[i] < '0' || nptr[i] > '9')
+		return (-2);
 	while (nptr[i] >= '0' && nptr[i] <= '9')
 	{
 		nb = nb * 10;
@@ -43,9 +43,15 @@ int	ft_atoi(const char *nptr)
 int	get_time(void)
 {
 	struct timeval	time;
+	int				seconds;
+	int				microseconds;
+	int				time_in_milliseconds;
 
 	gettimeofday(&time, NULL);
-	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
+	seconds = time.tv_sec;
+	microseconds = time.tv_usec;
+	time_in_milliseconds = (seconds * 1000) + (microseconds / 1000);
+	return (time_in_milliseconds);
 }
 
 void	clean(t_data *data)

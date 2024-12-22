@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:54:33 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/21 17:46:33 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/22 15:16:41 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_satisfaction(t_philo *philo)
 	{
 		while (i < philo->data->num_philosophers)
 		{
-			if (philo->data->philo[i].num_times_eaten \
+			if (philo[i].num_times_eaten \
 			< philo->data->num_times_to_eat)
 				break ;
 			i++;
@@ -70,7 +70,7 @@ void	*monitor_routine(void *data)
 	t_data	*tmp_data;
 
 	tmp_data = (t_data *)data;
-	while (tmp_data->is_dead == 0 && tmp_data->is_satisfied == 0)
+	while (!finish_meal(tmp_data))
 	{
 		i = 0;
 		while (i < tmp_data->num_philosophers)
@@ -85,14 +85,14 @@ void	*monitor_routine(void *data)
 	return (NULL);
 }
 
-int	finish_meal(t_philo *philo)
+int	finish_meal(t_data *data)
 {
-	pthread_mutex_lock(&philo->data->monitor);
-	if (philo->data->is_dead == 1 || philo->data->is_satisfied == 1)
+	pthread_mutex_lock(&data->monitor);
+	if (data->is_dead == 1 || data->is_satisfied == 1)
 	{
-		pthread_mutex_unlock(&philo->data->monitor);
+		pthread_mutex_unlock(&data->monitor);
 		return (1);
 	}
-	pthread_mutex_unlock(&philo->data->monitor);
+	pthread_mutex_unlock(&data->monitor);
 	return (0);
 }
