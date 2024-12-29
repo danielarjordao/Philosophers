@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 14:50:36 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/22 17:30:33 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/26 14:20:45 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ void	take_forks(t_philo *philo);
 void	take_first_fork(t_philo *philo);
 void	take_second_fork(t_philo *philo);
 void	my_sleep(int time, t_data *data);
+void	unlock_forks(t_philo *philo);
 
 //monitor.c
 int		check_death(t_philo *philo);

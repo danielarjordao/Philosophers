@@ -6,7 +6,7 @@
 /*   By: dramos-j <dramos-j@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/02 16:54:33 by dramos-j          #+#    #+#             */
-/*   Updated: 2024/12/22 15:16:41 by dramos-j         ###   ########.fr       */
+/*   Updated: 2024/12/29 12:18:55 by dramos-j         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_satisfaction(t_philo *philo)
 	{
 		while (i < philo->data->num_philosophers)
 		{
-			if (philo[i].num_times_eaten \
+			if (philo->data->philo[i].num_times_eaten
 			< philo->data->num_times_to_eat)
 				break ;
 			i++;
@@ -81,6 +81,7 @@ void	*monitor_routine(void *data)
 				return (NULL);
 			i++;
 		}
+		usleep(50);
 	}
 	return (NULL);
 }
